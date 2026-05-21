@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>Aylık Faaliyet Raporu</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+:root{--bg:#0f1117;--sf:#1a1d27;--sf2:#232636;--sf3:#2d3148;--ac:#3dd68c;--ac2:#5b9cf6;--ac3:#f0a500;--danger:#ff5c6c;--tx:#e8eaf0;--tx2:#9299b0;--tx3:#5c6280;--bd:#2a2e42;--bd2:#3a3f5c;--r:10px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;font-size:14px;}
+.hdr{background:var(--sf);border-bottom:1px solid var(--bd);padding:11px 14px;position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.hdr-logo{display:flex;align-items:center;gap:8px;}
+.hdr-icon{width:30px;height:30px;background:linear-gradient(135deg,var(--ac),var(--ac2));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.hdr h1{font-size:12px;font-weight:700;line-height:1.3;}
+.hdr h1 span{display:block;font-size:10px;color:var(--tx2);font-weight:400;}
+.hdr-btns{display:flex;gap:6px;}
+.bsm{padding:7px 11px;border-radius:7px;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer;border:none;transition:all .15s;white-space:nowrap;}
+.bsm-prv{background:var(--ac2);color:#fff;}
+.bsm-exp{background:var(--ac);color:#0f1117;}
+.bsm:active{transform:scale(.95);}
+.tabbar{background:var(--sf);border-bottom:2px solid var(--bd);display:flex;}
+.tabbtn{flex:1;padding:9px 4px;font-family:inherit;font-size:11px;font-weight:600;border:none;background:transparent;color:var(--tx2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;}
+.tabbtn.active{color:var(--ac);border-bottom-color:var(--ac);}
+.progbar{background:var(--sf2);padding:6px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:9px;}
+.progtk{flex:1;height:3px;background:var(--bd2);border-radius:2px;overflow:hidden;}
+.progfill{height:100%;background:linear-gradient(90deg,var(--ac),var(--ac2));border-radius:2px;transition:width .4s ease;width:0%;}
+.progtxt{font-size:10px;color:var(--tx2);font-family:'IBM Plex Mono',monospace;white-space:nowrap;}
+.secnav{display:flex;overflow-x:auto;padding:7px 14px;gap:6px;background:var(--sf);border-bottom:1px solid var(--bd);scrollbar-width:none;}
+.secnav::-webkit-scrollbar{display:none;}
+.spill{padding:5px 10px;border-radius:20px;border:1px solid var(--bd2);background:transparent;color:var(--tx2);font-family:inherit;font-size:10px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s;display:flex;align-items:center;gap:4px;}
+.spill.active{background:var(--ac);color:#0f1117;border-color:var(--ac);}
+.spill.done{border-color:var(--ac);color:var(--ac);}
+.sdot{width:6px;height:6px;border-radius:50%;background:var(--bd2);flex-shrink:0;}
+.sdot.ok{background:var(--ac);}
+.tabpanel{display:none;}
+.tabpanel.active{display:block;}
+.main{padding:11px 14px 110px;max-width:720px;margin:0 auto;}
+.sec{display:none;animation:fi .25s ease;}
+.sec.active{display:block;}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.stitle{font-size:14px;font-weight:700;margin-bottom:3px;display:flex;align-items:center;gap:7px;}
+.sbadge{background:var(--ac2);color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:7px;font-family:'IBM Plex Mono',monospace;}
+.sdesc{font-size:11px;color:var(--tx2);margin-bottom:12px;}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);margin-bottom:9px;overflow:hidden;}
+.chdr{padding:9px 12px;background:var(--sf2);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;}
+.chl{display:flex;align-items:center;gap:7px;}
+.ccode{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--ac);font-weight:600;background:rgba(61,214,140,.08);padding:2px 5px;border-radius:3px;}
+.ctitle{font-size:12px;font-weight:600;}
+.ctog{font-size:10px;color:var(--tx3);transition:transform .2s;}
+.ctog.open{transform:rotate(180deg);}
+.cbody{padding:12px;}
+.cbody.collapsed{display:none;}
+.field{margin-bottom:11px;}
+.field:last-child{margin-bottom:0;}
+.flabel{display:block;font-size:10px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;}
+.req{color:var(--danger);margin-left:2px;}
+input[type=text],input[type=date],input[type=number],select,textarea{width:100%;background:var(--sf3);border:1px solid var(--bd2);color:var(--tx);padding:9px 10px;border-radius:7px;font-family:inherit;font-size:12px;transition:border-color .2s,box-shadow .2s;outline:none;-webkit-appearance:none;}
+input:focus,select:focus,textarea:focus{border-color:var(--ac);box-shadow:0 0 0 2px rgba(61,214,140,.12);}
+textarea{resize:vertical;min-height:70px;line-height:1.5;}
+select option{background:var(--sf3);}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+@media(max-width:400px){.g2{grid-template-columns:1fr;}}
+.chkgrp{display:flex;gap:7px;flex-wrap:wrap;margin-top:3px;}
+.chkitem{display:flex;align-items:center;gap:5px;padding:7px 10px;background:var(--sf3);border:1px solid var(--bd2);border-radius:7px;cursor:pointer;transition:all .12s;font-size:12px;}
+.chkitem input{display:none;}
+.cbox{width:14px;height:14px;border:2px solid var(--bd2);border-radius:3px;display:flex;align-items:center;justify-content:center;transition:all .12s;flex-shrink:0;font-size:8px;}
+.chkitem input:checked~.cbox{background:var(--ac);border-color:var(--ac);color:#000;}
+.chkitem:has(input:checked){border-color:var(--ac);background:rgba(61,214,140,.07);}
+.dtbl{width:100%;border-collapse:collapse;margin-top:5px;font-size:11px;}
+.dtbl th{background:var(--sf2);padding:6px 5px;font-size:9px;text-transform:uppercase;color:var(--tx2);font-weight:700;text-align:left;border-bottom:1px solid var(--bd);}
+.dtbl td{padding:3px;vertical-align:top;border-bottom:1px solid var(--bd);}
+.dtbl td input,.dtbl td select{padding:6px 6px;font-size:11px;border-radius:5px;}
+.badd{background:rgba(61,214,140,.07);border:1px dashed var(--ac);color:var(--ac);padding:7px 11px;border-radius:7px;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer;width:100%;margin-top:5px;transition:all .12s;}
+.badd:active{background:rgba(61,214,140,.15);}
+.bdel{background:rgba(255,92,108,.1);border:none;color:var(--danger);width:25px;height:25px;border-radius:5px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;}
+.phzone{border:2px dashed var(--bd2);border-radius:var(--r);padding:16px;text-align:center;cursor:pointer;transition:all .2s;background:var(--sf3);margin-top:5px;}
+.phzone:hover,.phzone.drag-over{border-color:var(--ac);background:rgba(61,214,140,.04);}
+.phzone input{display:none;}
+.phzone-icon{font-size:24px;margin-bottom:4px;}
+.phzone-txt{font-size:11px;color:var(--tx2);}
+.phzone-txt strong{color:var(--ac);}
+.phgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:6px;margin-top:7px;}
+.phthumb{position:relative;aspect-ratio:1;border-radius:7px;overflow:hidden;background:var(--sf3);}
+.phthumb img{width:100%;height:100%;object-fit:cover;}
+.phthumb-del{position:absolute;top:3px;right:3px;background:rgba(0,0,0,.75);border:none;color:#fff;border-radius:50%;width:17px;height:17px;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.phcap input{font-size:10px;padding:3px 6px;margin-top:3px;}
+.phitem{display:flex;flex-direction:column;}
+.ibadge{display:inline-flex;align-items:center;gap:5px;background:rgba(91,156,246,.1);border:1px solid rgba(91,156,246,.22);color:var(--ac2);padding:5px 9px;border-radius:6px;font-size:10px;margin-bottom:7px;}
+.snbtns{display:flex;gap:8px;margin-top:16px;padding-top:13px;border-top:1px solid var(--bd);}
+.bprev,.bnext{flex:1;padding:10px;border-radius:7px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:all .15s;}
+.bprev{background:var(--sf2);color:var(--tx);border:1px solid var(--bd2)!important;}
+.bnext{background:var(--ac2);color:#fff;}
+.bprev:active,.bnext:active{transform:scale(.97);}
+.aibox{background:linear-gradient(135deg,rgba(61,214,140,.05),rgba(91,156,246,.05));border:1px solid rgba(61,214,140,.22);border-radius:var(--r);padding:13px;margin-bottom:9px;}
+.aihdr{display:flex;align-items:center;gap:8px;margin-bottom:9px;}
+.aiicon{width:28px;height:28px;background:linear-gradient(135deg,var(--ac),var(--ac2));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.aihdr h3{font-size:12px;font-weight:700;}
+.aihdr p{font-size:10px;color:var(--tx2);}
+.baigen{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#0f1117;border:none;padding:10px 14px;border-radius:7px;font-family:inherit;font-size:11px;font-weight:800;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s;margin-bottom:9px;}
+.baigen:active{transform:scale(.97);}
+.baigen:disabled{opacity:.6;cursor:not-allowed;}
+.aires{background:var(--sf2);border:1px solid var(--bd2);border-radius:8px;padding:12px;min-height:50px;}
+.aires.loading{display:flex;align-items:center;justify-content:center;gap:9px;color:var(--tx2);font-size:11px;}
+.aispinner{width:15px;height:15px;border:2px solid var(--bd2);border-top-color:var(--ac);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.aimadde{display:flex;gap:7px;margin-bottom:7px;align-items:flex-start;}
+.aimadde:last-child{margin-bottom:0;}
+.aibullet{width:18px;height:18px;background:rgba(61,214,140,.13);color:var(--ac);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;flex-shrink:0;margin-top:1px;}
+.aimtxt{font-size:11px;line-height:1.55;color:var(--tx);}
+.aicopy{background:var(--sf3);border:1px solid var(--bd2);color:var(--tx2);padding:6px 11px;border-radius:6px;font-family:inherit;font-size:10px;font-weight:600;cursor:pointer;margin-top:7px;transition:all .15s;}
+.aicopy:hover{color:var(--ac);border-color:var(--ac);}
+.prvwrap{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:9px;}
+.prvsec{}
+.prvshdr{padding:9px 12px;background:var(--sf2);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:7px;cursor:pointer;user-select:none;}
+.prvshdr .pcode{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--ac);font-weight:700;background:rgba(61,214,140,.08);padding:2px 5px;border-radius:3px;}
+.prvshdr .ptitle{font-size:12px;font-weight:700;flex:1;}
+.prvshdr .ptog{font-size:10px;color:var(--tx3);}
+.prvbody{padding:12px;border-bottom:1px solid var(--bd);}
+.prvbody.pcol{display:none;}
+.prow{display:flex;gap:7px;margin-bottom:6px;align-items:flex-start;font-size:11px;}
+.prow:last-child{margin-bottom:0;}
+.plbl{color:var(--tx2);font-weight:600;min-width:120px;max-width:120px;flex-shrink:0;font-size:10px;padding-top:1px;line-height:1.4;}
+.pval{color:var(--tx);flex:1;line-height:1.5;font-size:11px;}
+.pval.empty{color:var(--tx3);font-style:italic;}
+.ptblwrap{margin-top:6px;overflow-x:auto;}
+.ptbl{width:100%;border-collapse:collapse;font-size:10px;}
+.ptbl th{background:var(--sf3);padding:5px 6px;color:var(--tx2);font-size:9px;font-weight:700;text-align:left;border-bottom:1px solid var(--bd);}
+.ptbl td{padding:5px 6px;border-bottom:1px solid var(--bd);color:var(--tx);vertical-align:top;}
+.ptbl tr:last-child td{border-bottom:none;}
+.phprevgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(95px,1fr));gap:7px;margin-top:7px;}
+.phprevitem{border-radius:7px;overflow:hidden;background:var(--sf3);}
+.phprevitem img{width:100%;aspect-ratio:1;object-fit:cover;display:block;}
+.phcaptxt{font-size:10px;color:var(--tx2);padding:3px 5px;text-align:center;}
+.psubhdr{font-size:10px;color:var(--tx2);font-weight:700;margin:8px 0 4px;text-transform:uppercase;letter-spacing:.3px;}
+.prv-refresh{background:var(--sf2);border:1px solid var(--bd2);color:var(--tx2);padding:9px;border-radius:7px;font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;width:100%;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s;}
+.prv-refresh:hover{border-color:var(--ac);color:var(--ac);}
+.moverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:300;align-items:center;justify-content:center;padding:14px;}
+.moverlay.open{display:flex;}
+.modal{background:var(--sf);border:1px solid var(--bd2);border-radius:11px;padding:16px;max-width:380px;width:100%;}
+.modal h3{font-size:14px;margin-bottom:6px;}
+.modal p{font-size:11px;color:var(--tx2);margin-bottom:13px;line-height:1.6;}
+.mbtns{display:flex;flex-direction:column;gap:6px;}
+.mbtns button,.mbtns label{padding:10px;border-radius:7px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:all .15s;text-align:center;display:block;}
+.mbj{background:var(--ac2);color:#fff;}
+.mbp{background:var(--ac);color:#0f1117;}
+.mbc{background:var(--sf2);color:var(--tx);border:1px solid var(--bd2)!important;}
+.fab{position:fixed;bottom:20px;right:16px;background:var(--ac);color:#0f1117;width:40px;height:40px;border-radius:50%;border:none;font-size:15px;cursor:pointer;box-shadow:0 4px 14px rgba(61,214,140,.35);display:flex;align-items:center;justify-content:center;z-index:99;}
+.fab:active{transform:scale(.9);}
+@media print{
+  body{background:#fff;color:#000;font-family:Arial,sans-serif;font-size:10pt;}
+  .hdr,.tabbar,.progbar,.secnav,.snbtns,.fab,.moverlay,.badd,.bdel,.baigen,.phzone,.prv-refresh,.hdr-btns,.aicopy,.aibox{display:none!important;}
+  #panel-form{display:none!important;}
+  #panel-preview{display:block!important;}
+  .prvbody.pcol{display:block!important;}
+  .prvwrap{background:#fff;border:none;}
+  .prvshdr{background:#f0f0f0;border:1px solid #ccc;page-break-inside:avoid;}
+  .prvbody{border:1px solid #eee;page-break-inside:avoid;}
+  .ptbl th{background:#f5f5f5;}
+  .ptbl td,.ptbl th{border:1px solid #ddd;}
+  .pval.empty{color:#999;}
+  .plbl{color:#555;}
+  .phprevgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+  .phprevitem img{width:100%;aspect-ratio:1;object-fit:cover;}
+  .prvsec{page-break-inside:avoid;}
+}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="hdr-logo"><div class="hdr-icon">&#127807;</div><h1>Aylık Faaliyet Raporu<span>Çevre Danışmanlık</span></h1></div>
+  <div class="hdr-btns">
+    <button class="bsm" id="btnImport" style="background:#f0a500;color:#000">📂 Önceki</button>
+    <button class="bsm bsm-prv" id="btnPreview">&#128065; Önizle</button>
+    <button class="bsm bsm-exp" id="btnExport">&#128196; Aktar</button>
+  </div>
+</div>
+<div class="tabbar">
+  <button class="tabbtn active" id="tabbtn-form">&#9999;&#65039; Veri Girişi</button>
+  <button class="tabbtn" id="tabbtn-preview">&#128203; Rapor Önizleme</button>
+</div>
+<div class="progbar" id="progbarwrap">
+  <div class="progtk"><div class="progfill" id="progfill"></div></div>
+  <div class="progtxt" id="progtxt">0/8 bölüm</div>
+</div>
+<div id="dirtyBanner" style="display:none;background:rgba(240,165,0,.08);border-bottom:1px solid rgba(240,165,0,.25);padding:6px 14px;font-size:11px;color:var(--ac3);align-items:center;gap:6px;flex-wrap:wrap"></div>
+<div class="secnav" id="secnavwrap">
+  <button class="spill active" onclick="goTo(0)"><span class="sdot" id="dot0"></span>Kapak</button>
+  <button class="spill" onclick="goTo(1)"><span class="sdot" id="dot1"></span>A. İşletme</button>
+  <button class="spill" onclick="goTo(2)"><span class="sdot" id="dot2"></span>B. Çevresel</button>
+  <button class="spill" onclick="goTo(3)"><span class="sdot" id="dot3"></span>C. İzinler</button>
+  <button class="spill" onclick="goTo(4)"><span class="sdot" id="dot4"></span>Ç. Kaza</button>
+  <button class="spill" onclick="goTo(5)"><span class="sdot" id="dot5"></span>D. Şikayet</button>
+  <button class="spill" onclick="goTo(6)"><span class="sdot" id="dot6"></span>E. Eğitim</button>
+  <button class="spill" onclick="goTo(7)"><span class="sdot" id="dot7"></span>F. Sonuç</button>
+</div>
+
+<div class="tabpanel active" id="panel-form">
+<div class="main">
+<div class="sec active" id="sec0">
+  <div class="stitle"><span class="sbadge">0</span>Rapor Kapağı</div>
+  <div class="sdesc">Ziyaret tarihi ve saat bilgisi</div>
+  <div class="card">
+    <div class="chdr" onclick="tc(this)"><div class="chl"><span class="ccode">KAPAK</span><span class="ctitle">Ziyaret Bilgileri</span></div><span class="ctog open">&#9660;</span></div>
+    <div class="cbody">
+      <div class="g2">
+        <div class="field"><label class="flabel">Ziyaret Tarihi<span class="req">*</span></label><input type="date" id="ziyaretTarihi"></div>
+        <div class="field"><label class="flabel">Rapor Ayı</label><input type="text" id="raporAy" placeholder="Nisan 2026"></div>
+      </div>
+      <div class="field"><label class="flabel">Ziyaret Saati</label>
+        <div class="chkgrp">
+          <label class="chkitem"><input type="checkbox" id="sabah"><span class="cbox">&#10003;</span>Öğlenden Önce</label>
+          <label class="chkitem"><input type="checkbox" id="ogleden"><span class="cbox">&#10003;</span>Öğlenden Sonra</label>
+        </div>
+      </div>
+      <div class="ibadge">&#8505;&#65039; Tüm gün tesiste kalındıysa her iki seçenek işaretlenmelidir.</div>
+    </div>
+  </div>
+  <div class="snbtns"><button class="bnext" style="max-width:100%" onclick="goTo(1)">Sonraki: İşletme Bilgileri &#8594;</button></div>
+</div>
+
+<div class="sec" id="sec1">
+  <div class="stitle"><span class="sbadge">A</span>İşletme Bilgileri</div>
+  <div class="sdesc">Tesisin kimlik ve yasal bilgileri</div>
+  <div class="card">
+    <div class="chdr" onclick="tc(this)"><div class="chl"><span class="ccode">A.1</span><span class="ctitle">Tesis Kimliği</span></div><span class="ctog open">&#9660;</span></div>
+    <div class="cbody">
+      <div class="field"><label class="flabel">Tesisin Unvanı<span class="req">*</span></label><input type="text" id="unvan" placeholder="Tesis adı..."></div>
+      <div class="field"><label class="flabel">Tesisin Adresi</label><textarea id="adres" rows="2" placeholder="Mahalle, Cadde, No, İlçe/İl"></textarea></div>
+      <div class="field"><label class="flabel">Faaliyet Konusu</label><input type="text" id="faaliyetKonusu" placeholder="TURİZM KONAKLAMA TESİSİ"></div>
+      <div class="g2">
+        <div class="field"><label class="flabel">Çalışan Personel Sayısı</label><input type="number" id="personelSayisi" placeholder="0"></div>
+        <div class="field"><label class="flabel">İşletme Yetkilisi</label><input type="text" id="yetkili" placeholder="Ad Soyad"></div>
+      </div>
+      <div class="field"><label class="flabel">Çevre Danışmanlık Firması</label><input type="text" id="danismanFirma" placeholder="Firma adı..."></div>
+      <div class="field"><label class="flabel">Sorumlu Çevre Mühendisi</label><input type="text" id="muhendis" placeholder="Ad Soyad"></div>
+      <div class="g2">
+        <div class="field"><label class="flabel">Fatura Tarihi / No</label><input type="text" id="faturaBilgisi" placeholder="27.03.2026 / ATC2026..."></div>
+        <div class="field"><label class="flabel">Hizmet Yılı</label><input type="text" id="hizmetYili" placeholder="2026"></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chdr" onclick="tc(this)"><div class="chl"><span class="ccode">A.2</span><span class="ctitle">ÇED Kararları</span></div><span class="ctog open">&#9660;</span></div>
+    <div class="cbody">
+      <table class="dtbl"><thead><tr><th>Tarih/Sayı</th><th>Konu</th><th>Merci</th><th></th></tr></thead><tbody id="cedBody"></tbody></table>
+      <button class="badd" onclick="addRow('cedBody',['text','text','text'])">+ Satır Ekle</button>
+      <div class="field" style="margin-top:9px"><label class="flabel">ÇED Açıklama / Notlar</label><textarea id="cedAciklama" rows="3" placeholder="ÇED kararlarına ilişkin notlar..."></textarea></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chdr" onclick="tc(this)"><div class="chl"><span class="ccode">A.3</span><span class="ctitle">İzin Yönetmeliği Kapsamı</span></div><span class="ctog">&#9660;</span></div>
+    <div class="cbody collapsed"><div class="field"><label class="flabel">Kapsam Açıklaması</label><textarea id="izinKapsam" rows="3" placeholder="Ek-2 listesi kapsamındaki faaliyetler..."></textarea></div></div>
+  </div>
+  <div class="snbtns"><button class="bprev" onclick="goTo(0)">&#8592; Kapak</button><button class="bnext" onclick="goTo(2)">Sonraki: Çevresel &#8594;</button></div>
+</div>
+
+<div class="sec" id="sec2">
+  <div class="stitle"><span class="sbadge">B</span>Çevresel Etkiler ve Önlemler</div>
+  <div class="sdesc">Su, atıksu, hava, atık, gürültü yönetimi</div>
+  <div class="card">
+    <div class="chdr" onclick="tc(this)"><div class="chl"><span class="ccode">B.1</span><span class="ctitle">Su ve Atıksu Yönetimi</span></div><span class="ctog open">&#9660;</span></div>
+    <div class="cbody">
+      <div class="field"><label class="flabel">B.1.1 – Su Tüketimi</label>
+        <table class="dtbl"><thead><tr><th>Su Kaynağı</th><th>Bağlı Birim</th><th>Miktar (m³/ay)</th><th>Dönem</th><th></th></tr></thead><tbody id="suBody"></tbody></table>
+        <button class="badd" onclick="addRow('suBody',['text','text','number','text'])">+ Satır Ekle</button>
+      </div>
+      <div class="field"><label class="flabel">Su Tüketimi Açıklaması</label><textarea id="suAciklama" rows="2" placeholder="Fatura dönemi ve tutar bilgisi..."></textarea></div>
+      <div class="field"><label class="flabel">B.1.2 – Evsel Atıksu</label>
+        <table class="dtbl"><thead><tr><th>Atıksu Kaynağı</th><th>Miktar (m³/ay)</th><th>Bertaraf Yöntemi</th><th></th></tr></thead><tbody id="evselAtBody"></tbody></table>
+        <button class="badd" onclick="addRow('evselAtBody',['text','number','text'])">+ Satır Ekle</button>
+      </div>
+      <div class="field"><label class="flabel">Evsel Atıksu Açıklaması</label><textarea id="evselAtAciklama" rows="2" placeholder="Bağlantı kalite kontrol ruhsatı..."></textarea></div>
+      <div class="field"><label class="flabel">B.1.3 – Endüstriyel Atıksu</label><textarea id="endAtiksu" rows="2" placeholder="Endüstriyel atıksu durumu..."></textarea></div>
+      <div class="field"><label class="flabel">B.1.4 – Diğer Atıksular</label>
+        <table class="dtbl"><thead><tr><th>Atıksu Kaynağı</th><th>Miktar (m³/ay)</th><th>Bertaraf Yöntemi</th><th></th></tr></thead><tbody id="digerAtBody"></tbody></table>
+        <button class="badd" onclick="addRow('digerAtBody',['text','number','text'])">+ Satır Ekle</button>
+      </div>
+      <div class="field"><label class="flabel">B.1.5 – Atıksu Arıtma Tesisi</label><textarea id="artimaTesisi" rows="2" placeholder="Arıtma tesisi bilgisi..."></textarea></div>
+      <div class="field"><label class="flabel">B.1.6 – İç İzleme Analiz Sonuçları</label>
+        <table class="dtbl"><thead><tr><th>Tarih</th><th>Parametre</th><th>Yön. Limiti</th><th>Analiz Sonucu</th><th></th></tr></thead><tbody id="izlemeBody"></tbody></table>
+        <button class="badd" onclick="addRow('izlemeBody',['date','text','text','text'])">+ Satır Ekle</button>
+      </div>
+      <div class="field"><label class="flabel">B.1.7 – Yeraltı Suyu Kuyuları</label>
+        <table class="dtbl"><thead><tr><th>Nokta</th><th>Y Koordinat</th><th>X Koordinat</th><th>Derinlik (m)</th><th></th></tr></thead><tbody id="kuyuBody"></tbody></table>
+        <button class="badd" onclick="addRow('kuyuBody',['text','number','number','number'])">+ Satır Ekle</button>
+      </div>
+      <div class="field"><label class="flabel">B.1.8 – Deniz Suyu Kalitesi</label><textarea id="denizSuyu" rows="2" placeholder="Mavi Bayrak analizleri veya muafiyet..."></textarea></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chdr" onclick="tc(this)"><div class="chl"><span class="ccode">B.2</span><span class="ctitle">Hava Yönetimi</span></div><span class="ctog">&#9660;</span></div>
+    <div class="cbody collapsed">
+      <div class="field"><label class="flabel">Yakma Sistemleri</label>
+        <table class="dtbl"><thead><tr><th>Baca Kodu</th><th>Sistem Adı</th><th>Kullanım Amacı</th><th>Isıl Güç(kW)</th><th>Yakıt</th><th>Miktar(m³/s)</th><th></th></tr></thead><tbody id="yakmBody"></tbody></table>
+        <button class="badd" onclick="addRow('yakmBody',['text','text','text','number','text','number'])">+ Satır Ekle</button>
+      </div>
+      <div class="field"><label class="flabel">Baca Yükseklikleri</label>
+        <table class="dtbl"><thead><tr><th>Baca Kodu</th><th>Sistem Adı</th><th>Yerden (m)</th><th>Çatıdan (m)</th><th></th></tr></thead><tbody id="bacaBody"></tbody></table>
+        <button class="badd" onclick="addRow('bacaBody',['text','text','number','number'])">+ Satır Ekle</button>
+      </div>
+      <div class="field"><label class="flabel">B.2.1 – Teyit Ölçümü</label><textarea id="teyitOlcum" rows="2" placeholder="Emisyon ölçüm tarihi, firma, rapor..."></textarea></div>
+      <div class="field"><label class="flabel">B.2.2 – Sürekli Emisyon (SEÖS)</label><textarea id="seosAciklama" rows="2" placeholder="SEÖS yükümlülüğü durumu..."></textarea></div>
+      <div class="field"><label class="flabel">B.2.3 – İç İzleme (Hava)</label><textarea id="icIzlemeHava" rows="2" placeholder="Hava kalitesi ve baca gazı ölçüm durumu..."></textarea></div>
+      <div class="field"><label class="flabel">B.2.4 – Kontrolsüz Emisyon</label><textarea id="kontrolsuzEmisyon" rows="2" placeholder="Toz önlemleri, yol kaplama vb..."></textarea></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chdr" onclick="tc(this)"><div class="chl"><span class="ccode">B.3</span><span class="ctitle">Atık Yönetimi</span></div><span class="ctog">&#9660;</span></div>
+    <div class="cbody collapsed">
+      <div class="field"><label class="flabel">B.3.1 – Genel Atıklar</label>
+        <table class="dtbl"><thead><tr><th>Atık Kodu</th><th>Açıklama</th><th>Kaynak</th><th>Miktar(kg)</th><th>Bertaraf</th><th>Firma/Lisans</th><th>Gönderim/Taşıma</th><th></th></tr></thead><tbody id="genAtikBody"></tbody></table>
+        <button class="badd" onclick="addRow('genAtikBody',['text','text','text','number','text','text','text'])">+ Satır Ekle</button>
+      </div>
+      <div class="field"><label class="flabel">B.3.2 – Tehlikeli Atıklar</label>
+        <table class="dtbl"><thead><tr><th>Atık Kodu</th><th>Açıklama</th><th>Kaynak</th><th>Miktar(kg)</th><th>Bertaraf</th><th>Firma/Lisans</th><th>Gönderim/Taşıma</th><th></th></tr></thead><tbody id="tehAtikBody"></tbody></table>
+        <button class="badd" onclick="addRow('tehAtikBody',['text','text','text','number','text','text','text'])">+ Satır Ekle</button>
+      </div>
+      <div class="field"><label class="flabel">B.3.3 – Atık Analizleri</label><textarea id="atikAnaliz" rows="2" placeholder="Dönemde yapılan atık analizleri..."></textarea></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chdr" onclick="tc(this)"><div class="chl"><span class="ccode">B.4</span><span class="ctitle">Gürültü Yönetimi</span></div><span class="ctog">&#9660;</span></div>
+    <div class="cbody collapsed">
+      <div class="field"><label class="flabel">Gürültü İzni Durumu</label><textarea id="gurultuIzin" rows="2" placeholder="Muafiyet yazısı tarihi, sayısı..."></textarea></div>
+      <div class="field"><label class="flabel">Müzik Yayın Bilgileri</label>
+        <table class="dtbl"><thead><tr><th>Yayın Türü</th><th>Bölge</th><th>Saat Aralığı</th><th></th></tr></thead><tbody id="muzikBody"></tbody></table>
+        <button class="badd" onclick="addRow('muzikBody',['text','text','text'])">+ Satır Ekle</button>
+      </div>
+      <div class="field"><label class="flabel">Akustik Rapor ve İzin</label><textarea id="akustikRapor" rows="2" placeholder="Rapor tarihi, belge numarası..."></textarea></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chdr" onclick="tc(this)"><div class="chl"><span class="ccode">B.5-B.10</span><span class="ctitle">Toprak, Kimyasal, Kıyı, Maden, Diğer</span></div><span class="ctog">&#9660;</span></div>
+    <div class="cbody collapsed">
+      <div class="field"><label class="flabel">B.5 – Toprak Kirliliği</label><textarea id="toprak" rows="2" placeholder="KSBİS kaydı, kirlilik durumu..."></textarea></div>
+      <div class="field"><label class="flabel">B.6 – Kimyasallar Yönetimi</label><textarea id="kimyasal" rows="2" placeholder="Depolama, SDS, ambalaj atıkları..."></textarea></div>
+      <div class="field"><label class="flabel">B.7 – Büyük End. Kazalar (BEKRA)</label><textarea id="endKaza" rows="2" placeholder="BEKRA kapsamı değerlendirmesi..."></textarea></div>
+      <div class="field"><label class="flabel">B.8.1 – Deniz Kirliliği</label><textarea id="denizKirlilik" rows="2" placeholder="Kıyı tesisi durumu..."></textarea></div>
+      <div class="field"><label class="flabel">B.8.2 – Atık Kabul Tesisi</label><textarea id="atikKabul" rows="2" placeholder="Kıyı tesisi durumu..."></textarea></div>
+      <div class="field"><label class="flabel">B.9.1 – Koordinatlar (Maden)</label><textarea id="madenKoord" rows="2" placeholder="Maden işletmesi durumu..."></textarea></div>
+      <div class="field"><label class="flabel">B.9.2 – Patlatma Bilgileri</label><textarea id="patlatma" rows="2" placeholder="Maden işletmesi durumu..."></textarea></div>
+      <div class="field"><label class="flabel">B.10.1 – Tehlikeli Atık Sigortası</label><textarea id="sigortaBilgi" rows="2" placeholder="Sigorta tarihi, geçerlilik..."></textarea></div>
+      <div class="field"><label class="flabel">B.10.2 – Atık Yönetim Planı</label><textarea id="atikYonetimPlan" rows="2" placeholder="Plan tarihi, geçerlilik süresi..."></textarea></div>
+      <div class="field"><label class="flabel">B.10.3 – Atık Beyanı</label>
+        <table class="dtbl"><thead><tr><th>Beyan Adı</th><th>Beyan Dönemi</th><th>Açıklama</th><th></th></tr></thead><tbody id="beyanBody"></tbody></table>
+        <button class="badd" onclick="addRow('beyanBody',['text','text','text'])">+ Satır Ekle</button>
+      </div>
+      <div class="field"><label class="flabel">B.10.4 – Sıfır Atık Belgesi</label><textarea id="sifirAtikBelge" rows="2" placeholder="Belge tarihi, numarası, geçerlilik..."></textarea></div>
+    </div>
+  </div>
+  <div class="snbtns"><button class="bprev" onclick="goTo(1)">&#8592; İşletme</button><button class="bnext" onclick="goTo(3)">Sonraki: İzinler &#8594;</button></div>
+</div>
+
+<div class="sec" id="sec3">
+  <div class="stitle"><span class="sbadge">C</span>GFB / Çevre İzni / Lisans</div>
+  <div class="sdesc">Geçici faaliyet belgesi ve çevre izni bilgileri</div>
+  <div class="card">
+    <div class="chdr" onclick="tc(this)"><div class="chl"><span class="ccode">C.1</span><span class="ctitle">GFB İşlemleri</span></div><span class="ctog open">&#9660;</span></div>
+    <div class="cbody">
+      <table class="dtbl"><thead><tr><th>GFB Konusu</th><th>Belge Tarih/Sayı</th><th>Alındığı Mercii</th><th></th></tr></thead><tbody id="gfbBody"></tbody></table>
+      <button class="badd" onclick="addRow('gfbBody',['text','text','text'])">+ Satır Ekle</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chdr" onclick="tc(this)"><div class="chl"><span class="ccode">C.2</span><span class="ctitle">Çevre İzni / Lisansı</span></div><span class="ctog open">&#9660;</span></div>
+    <div class="cbody">
+      <table class="dtbl"><thead><tr><th>İzin/Lisans Konusu</th><th>Belge Tarih/Sayı</th><th>Alındığı Mercii</th><th></th></tr></thead><tbody id="cevreIzinBody"></tbody></table>
+      <button class="badd" onclick="addRow('cevreIzinBody',['text','text','text'])">+ Satır Ekle</button>
+      <div class="field" style="margin-top:8px"><label class="flabel">Açıklamalar</label><textarea id="izinAciklama" rows="2" placeholder="Geçerlilik tarihleri, notlar..."></textarea></div>
+    </div>
+  </div>
+  <div class="snbtns"><button class="bprev" onclick="goTo(2)">&#8592; Çevresel</button><button class="bnext" onclick="goTo(4)">Sonraki: Kaza/Bakım &#8594;</button></div>
+</div>
+
+<div class="sec" id="sec4">
+  <div class="stitle"><span class="sbadge">Ç</span>Kaza, Kaçak, Arıza, Bakım</div>
+  <div class="sdesc">Dönem içinde yaşanan olaylar</div>
+  <div class="card">
+    <div class="chdr" onclick="tc(this)"><div class="chl"><span class="ccode">Ç.1</span><span class="ctitle">Kaza ve Kaçaklar</span></div><span class="ctog open">&#9660;</span></div>
+    <div class="cbody">
+      <table class="dtbl"><thead><tr><th>Oluşan Bölge</th><th>Tarih</th><th>Alınan Önlem</th><th>Sonuç</th><th></th></tr></thead><tbody id="kazaBody"></tbody></table>
+      <button class="badd" onclick="addRow('kazaBody',['text','date','text','text'])">+ Satır Ekle</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chdr" onclick="tc(this)"><div class="chl"><span class="ccode">Ç.2</span><span class="ctitle">Arıza, Bakım ve Onarım</span></div><span class="ctog open">&#9660;</span></div>
+    <div class="cbody">
+      <table class="dtbl"><thead><tr><th>Yapılan Bölge</th><th>Arıza/Bakım Açıklaması</th><th>Sonuç</th><th></th></tr></thead><tbody id="bakimBody"></tbody></table>
+      <button class="badd" onclick="addRow('bakimBody',['text','text','text'])">+ Satır Ekle</button>
+    </div>
+  </div>
+  <div class="snbtns"><button class="bprev" onclick="goTo(3)">&#8592; İzinler</button><button class="bnext" onclick="goTo(5)">Sonraki: Şikayetler &#8594;</button></div>
+</div>
+
+<div class="sec" id="sec5">
+  <div class="stitle"><span class="sbadge">D</span>Şikayetler</div>
+  <div class="sdesc">İşletmeye ve Bakanlığa gelen şikayetler</div>
+  <div class="card">
+    <div class="chdr" onclick="tc(this)"><div class="chl"><span class="ccode">D.1</span><span class="ctitle">İşletmeye Gelen Şikayetler</span></div><span class="ctog open">&#9660;</span></div>
+    <div class="cbody"><textarea id="isletmeSimayet" rows="3" placeholder="Dönemdeki şikayetler veya şikayet alınmamıştır..."></textarea></div>
+  </div>
+  <div class="card">
+    <div class="chdr" onclick="tc(this)"><div class="chl"><span class="ccode">D.2</span><span class="ctitle">Bakanlığa İletilen Şikayetler</span></div><span class="ctog open">&#9660;</span></div>
+    <div class="cbody"><textarea id="bakanlikSikayet" rows="3" placeholder="Bakanlığa iletilen şikayetler..."></textarea></div>
+  </div>
+  <div class="snbtns"><button class="bprev" onclick="goTo(4)">&#8592; Kaza/Bakım</button><button class="bnext" onclick="goTo(6)">Sonraki: Eğitimler &#8594;</button></div>
+</div>
+
+<div class="sec" id="sec6">
+  <div class="stitle"><span class="sbadge">E</span>Eğitimler</div>
+  <div class="sdesc">Dönemde verilen eğitimler ve bilinçlendirme çalışmaları</div>
+  <div class="card">
+    <div class="chdr" onclick="tc(this)"><div class="chl"><span class="ccode">E.1</span><span class="ctitle">Eğitimler</span></div><span class="ctog open">&#9660;</span></div>
+    <div class="cbody">
+      <table class="dtbl"><thead><tr><th>Eğitim Konusu</th><th>Tarih</th><th>Katılımcı Sayısı</th><th></th></tr></thead><tbody id="egitimBody"></tbody></table>
+      <button class="badd" onclick="addRow('egitimBody',['text','date','number'])">+ Satır Ekle</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chdr" onclick="tc(this)"><div class="chl"><span class="ccode">E.2</span><span class="ctitle">Bilinçlendirme Çalışmaları</span></div><span class="ctog open">&#9660;</span></div>
+    <div class="cbody"><textarea id="bilinclendir" rows="3" placeholder="Bilinçlendirme çalışmaları veya yapılmamışsa açıklama..."></textarea></div>
+  </div>
+  <div class="snbtns"><button class="bprev" onclick="goTo(5)">&#8592; Şikayetler</button><button class="bnext" onclick="goTo(7)">Sonraki: Sonuç &#8594;</button></div>
+</div>
+
+<div class="sec" id="sec7">
+  <div class="stitle"><span class="sbadge">F</span>Sonuç ve Öneriler</div>
+  <div class="sdesc">AI analizi, sonuç metni ve fotoğraf kanıtları</div>
+  <div class="aibox">
+    <div class="aihdr">
+      <div class="aiicon">&#129302;</div>
+      <div><h3>Otomatik AI Yorum &amp; Öneri</h3><p>Tüm bölümlerdeki veriler (su, atık, hava, izin, eğitim...) okunarak maddeli sonuç oluşturulur ve Sonuç Metnine aktarılır</p></div>
+    </div>
+    <button class="baigen" id="aiBtn" onclick="generateAI()">&#10024; Tüm Verilerden Otomatik Sonuç Üret</button>
+    <div class="aires" id="aiRes" style="display:none"></div>
+    <button class="aicopy" id="aiCopy" style="display:none" onclick="copyAI()">&#128203; Öneriyi Sonuç Metnine Aktar</button>
+  </div>
+  <div class="card">
+    <div class="chdr" onclick="tc(this)"><div class="chl"><span class="ccode">F.1</span><span class="ctitle">Sonuç ve Öneriler Metni</span></div><span class="ctog open">&#9660;</span></div>
+    <div class="cbody"><div class="field"><label class="flabel">Genel Değerlendirme<span class="req">*</span></label><textarea id="sonucMetin" rows="10" placeholder="AI üretilen metni buraya aktarabilir veya kendiniz yazabilirsiniz..."></textarea></div></div>
+  </div>
+  <div class="card">
+    <div class="chdr" onclick="tc(this)"><div class="chl"><span class="ccode">F.2</span><span class="ctitle">Fotoğraf Kanıtları</span></div><span class="ctog open">&#9660;</span></div>
+    <div class="cbody">
+      <div class="ibadge">&#128248; Saha fotoğraflarını ekleyin; her birine açıklama yazın.</div>
+      <div class="phzone" id="phzone" onclick="document.getElementById('phInput').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleDrop(event)">
+        <input type="file" id="phInput" accept="image/*" multiple onchange="handleFiles(this.files)">
+        <div class="phzone-icon">&#128247;</div>
+        <div class="phzone-txt">Fotoğraf yüklemek için <strong>tıklayın</strong> veya sürükleyin</div>
+      </div>
+      <div class="phgrid" id="phgrid"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chdr" onclick="tc(this)"><div class="chl"><span class="ccode">G</span><span class="ctitle">Ekler</span></div><span class="ctog open">&#9660;</span></div>
+    <div class="cbody"><textarea id="ekler" rows="3" placeholder="Eklenen belgeler listesi..."></textarea></div>
+  </div>
+  <div class="card">
+    <div class="chdr" onclick="tc(this)"><div class="chl"><span class="ccode">İMZA</span><span class="ctitle">İmza Bilgileri</span></div><span class="ctog open">&#9660;</span></div>
+    <div class="cbody">
+      <div class="g2">
+        <div class="field"><label class="flabel">İşletme Sorumlusu</label><input type="text" id="isletmeSorumlu" placeholder="Ad Soyad"></div>
+        <div class="field"><label class="flabel">Çevre Mühendisi</label><input type="text" id="muhendisImza" placeholder="Ad Soyad"></div>
+      </div>
+      <div class="g2">
+        <div class="field"><label class="flabel">İmza Tarihi (İşletme)</label><input type="date" id="imzaTarih1"></div>
+        <div class="field"><label class="flabel">İmza Tarihi (Mühendis)</label><input type="date" id="imzaTarih2"></div>
+      </div>
+    </div>
+  </div>
+  <div class="snbtns">
+    <button class="bprev" onclick="goTo(6)">&#8592; Eğitimler</button>
+    <button class="bnext" id="btnGotoPreview" style="background:var(--ac);color:#0f1117;">&#128203; Raporu Önizle</button>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="tabpanel" id="panel-preview">
+<div class="main">
+  <button class="prv-refresh" id="btnRefreshPreview">&#128260; Önizlemeyi Güncelle</button>
+  <div id="prvContent"></div>
+</div>
+</div>
+
+<button class="fab" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8593;</button>
+
+<!-- ÖNCEKİ RAPOR YÜKLEME MODALI -->
+<div class="moverlay" id="importModal">
+  <div class="modal" style="max-width:440px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <div style="width:36px;height:36px;background:linear-gradient(135deg,#f0a500,#ff6b35);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">📂</div>
+      <div><h3 style="font-size:14px;margin:0">Önceki Raporu Yükle</h3><p style="font-size:10px;color:var(--tx2);margin:0">Sabit veriler aktarılır, değiştirilen bölümler korunur</p></div>
+    </div>
+    <div style="background:var(--sf3);border:1px solid var(--bd2);border-radius:8px;padding:11px;margin-bottom:12px;font-size:11px;line-height:1.7;color:var(--tx2)">
+      <b style="color:var(--tx);display:block;margin-bottom:4px">⚙️ Nasıl çalışır?</b>
+      Önceki raporu yüklediğinizde tüm bölümler doldurulur.<br>
+      Siz hangi bölüme <b style="color:var(--ac)">dokunursanız</b> o bölüm ✏️ <span style="color:var(--ac3)">değişti</span> olarak işaretlenir.<br>
+      Kaydederken: değiştirdiğiniz bölümler yeni verilerle, dokunmadığınız bölümler önceki raporla birleştirilir.
+    </div>
+    <div id="importedInfo" style="display:none;background:rgba(61,214,140,.07);border:1px solid rgba(61,214,140,.2);border-radius:8px;padding:9px;margin-bottom:10px;font-size:11px;color:var(--ac)"></div>
+    <div class="mbtns">
+      <label style="background:var(--ac3);color:#000;padding:10px;border-radius:7px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;border:none;text-align:center;display:block">
+        📂 Önceki Raporu Seç (.json)
+        <input type="file" accept=".json" onchange="loadPreviousReport(event)" style="display:none">
+      </label>
+      <button class="mbc" id="btnImportClose">Kapat</button>
+    </div>
+  </div>
+</div>
+
+<!-- DIŞA AKTARMA MODALI -->
+<div class="moverlay" id="expModal">
+  <div class="modal">
+    <h3>&#128196; Raporu Dışa Aktar</h3>
+    <p>Verilerinizi kaydedin veya yazdırarak PDF oluşturun.</p>
+    <div class="mbtns">
+      <button class="mbj" id="btnExpJSON">&#128190; JSON Yedek Kaydet</button>
+      <button class="mbp" id="btnExpPrint">&#128424;&#65039; Yazdır / PDF Kaydet</button>
+      <button class="mbc" id="btnExpClose">İptal</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(t){
+  ['form','preview'].forEach(function(x){
+    document.getElementById('panel-'+x).classList.toggle('active',x===t);
+    document.getElementById('tabbtn-'+x).classList.toggle('active',x===t);
+  });
+  var isPrv=t==='preview';
+  document.getElementById('progbarwrap').style.display=isPrv?'none':'flex';
+  document.getElementById('secnavwrap').style.display=isPrv?'none':'flex';
+  renderPreview(); // Her geçişte güncelle, print için de hazır olsun
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+var cur=0;
+var secDone=new Array(8).fill(false);
+function goTo(i){
+  document.getElementById('sec'+cur).classList.remove('active');
+  document.querySelectorAll('.spill')[cur].classList.remove('active');
+  secDone[cur]=true;
+  document.getElementById('dot'+cur).classList.add('ok');
+  document.querySelectorAll('.spill')[cur].classList.add('done');
+  cur=i;
+  document.getElementById('sec'+cur).classList.add('active');
+  document.querySelectorAll('.spill')[cur].classList.add('active');
+  document.querySelectorAll('.spill')[cur].classList.remove('done');
+  window.scrollTo({top:0,behavior:'smooth'});
+  updProg();
+}
+function updProg(){
+  var n=secDone.filter(Boolean).length;
+  document.getElementById('progfill').style.width=(n/8*100)+'%';
+  document.getElementById('progtxt').textContent=n+'/8 bolum';
+}
+function tc(hdr){
+  var b=hdr.nextElementSibling;
+  var tog=hdr.querySelector('.ctog');
+  b.classList.toggle('collapsed');
+  tog.classList.toggle('open');
+}
+function addRow(tbId,colTypes){
+  var tb=document.getElementById(tbId);
+  var tr=document.createElement('tr');
+  colTypes.forEach(function(t){
+    var td=document.createElement('td');
+    var inp=document.createElement('input');
+    inp.type=t==='number'?'number':(t==='date'?'date':'text');
+    td.appendChild(inp);tr.appendChild(td);
+  });
+  var dtd=document.createElement('td');dtd.style.width='28px';
+  var db=document.createElement('button');db.className='bdel';db.textContent='x';
+  db.onclick=function(){tr.remove();};
+  dtd.appendChild(db);tr.appendChild(dtd);
+  tb.appendChild(tr);
+}
+function getTbl(tbId){
+  return Array.from(document.querySelectorAll('#'+tbId+' tr')).map(function(r){
+    return Array.from(r.querySelectorAll('input,select')).map(function(el){return el.value;});
+  }).filter(function(r){return r.some(function(x){return x&&x.trim();});});
+}
+var photos=[];
+function handleFiles(fs){
+  Array.from(fs).forEach(function(f){
+    var r=new FileReader();
+    r.onload=function(e){addPh(e.target.result);};
+    r.readAsDataURL(f);
+  });
+}
+function handleDrop(e){e.preventDefault();document.getElementById('phzone').classList.remove('drag-over');handleFiles(e.dataTransfer.files);}
+function addPh(src){photos.push({id:Date.now()+Math.random(),src:src,caption:''});rendPh();}
+function rendPh(){
+  var g=document.getElementById('phgrid');g.innerHTML='';
+  photos.forEach(function(p,i){
+    var d=document.createElement('div');d.className='phitem';
+    d.innerHTML='<div class="phthumb"><img src="'+p.src+'"><button class="phthumb-del" onclick="delPh('+i+')">x</button></div><div class="phcap"><input type="text" placeholder="Aciklama..." value="'+p.caption+'" oninput="photos['+i+'].caption=this.value"></div>';
+    g.appendChild(d);
+  });
+}
+function delPh(i){photos.splice(i,1);rendPh();}
+function v(id){return (document.getElementById(id)||{}).value||'';}
+function sv(id,val){var el=document.getElementById(id);if(el&&val!=null)el.value=val;}
+function collectAll(){
+  return{
+    kapak:{ziyaretTarihi:v('ziyaretTarihi'),raporAy:v('raporAy'),sabah:document.getElementById('sabah').checked,ogleden:document.getElementById('ogleden').checked},
+    isletme:{unvan:v('unvan'),adres:v('adres'),faaliyetKonusu:v('faaliyetKonusu'),personelSayisi:v('personelSayisi'),yetkili:v('yetkili'),danismanFirma:v('danismanFirma'),muhendis:v('muhendis'),faturaBilgisi:v('faturaBilgisi'),hizmetYili:v('hizmetYili'),cedKararlari:getTbl('cedBody'),cedAciklama:v('cedAciklama'),izinKapsam:v('izinKapsam')},
+    cevre:{suTuketimi:getTbl('suBody'),suAciklama:v('suAciklama'),evselAtiksu:getTbl('evselAtBody'),evselAtAciklama:v('evselAtAciklama'),endAtiksu:v('endAtiksu'),digerAtiksu:getTbl('digerAtBody'),artimaTesisi:v('artimaTesisi'),izleme:getTbl('izlemeBody'),kuyular:getTbl('kuyuBody'),denizSuyu:v('denizSuyu'),yakmaSistemleri:getTbl('yakmBody'),bacaYukseklikleri:getTbl('bacaBody'),teyitOlcum:v('teyitOlcum'),seosAciklama:v('seosAciklama'),icIzlemeHava:v('icIzlemeHava'),kontrolsuzEmisyon:v('kontrolsuzEmisyon'),genAtiklar:getTbl('genAtikBody'),tehAtiklar:getTbl('tehAtikBody'),atikAnaliz:v('atikAnaliz'),gurultuIzin:v('gurultuIzin'),muzikYayin:getTbl('muzikBody'),akustikRapor:v('akustikRapor'),toprak:v('toprak'),kimyasal:v('kimyasal'),endKaza:v('endKaza'),denizKirlilik:v('denizKirlilik'),atikKabul:v('atikKabul'),madenKoord:v('madenKoord'),patlatma:v('patlatma'),sigortaBilgi:v('sigortaBilgi'),atikYonetimPlan:v('atikYonetimPlan'),beyanlar:getTbl('beyanBody'),sifirAtikBelge:v('sifirAtikBelge')},
+    izinler:{gfb:getTbl('gfbBody'),cevreIzin:getTbl('cevreIzinBody'),izinAciklama:v('izinAciklama')},
+    kazaBakim:{kazalar:getTbl('kazaBody'),bakimlar:getTbl('bakimBody')},
+    sikayetler:{isletme:v('isletmeSimayet'),bakanlik:v('bakanlikSikayet')},
+    egitimler:{egitimler:getTbl('egitimBody'),bilinclendir:v('bilinclendir')},
+    sonuc:{metin:v('sonucMetin'),ekler:v('ekler'),isletmeSorumlu:v('isletmeSorumlu'),muhendisImza:v('muhendisImza'),imzaTarih1:v('imzaTarih1'),imzaTarih2:v('imzaTarih2'),fotograflar:photos.map(function(p){return{caption:p.caption,src:p.src};})}
+  };
+}
+async function generateAI(){
+  var btn=document.getElementById('aiBtn');
+  var res=document.getElementById('aiRes');
+  var cp=document.getElementById('aiCopy');
+  btn.disabled=true;
+  res.style.display='flex';
+  res.className='aires loading';
+  res.innerHTML='<div class="aispinner"></div><span>Tüm bölümler analiz ediliyor...</span>';
+  cp.style.display='none';
+
+  var d=collectAll();
+
+  // Su ve atıksu analizi
+  var suRows=d.cevre.suTuketimi.filter(function(r){return r.some(function(x){return x;});});
+  var suOzet=suRows.map(function(r){return (r[0]||'Kaynak')+': '+(r[2]||'?')+' m³/ay ('+( r[3]||'dönem belirsiz')+')';}).join('; ') || 'Su tüketim verisi girilmemiş';
+
+  // İç izleme – limit aşımı kontrolü
+  var izlemeUyarilar=[];
+  var izlemeOzet=[];
+  d.cevre.izleme.forEach(function(r){
+    if(!r[1]) return;
+    var lim=parseFloat(r[2]); var sos=parseFloat(r[3]);
+    var durum='';
+    if(!isNaN(lim)&&!isNaN(sos)){
+      if(sos>lim){durum=' ⚠️ LİMİT AŞILDI';izlemeUyarilar.push(r[1]+': '+sos+' (limit: '+lim+')');}
+      else if(sos>lim*0.85){durum=' ⚠️ Limite yakın';izlemeUyarilar.push(r[1]+' limite yakın: '+sos+' (limit: '+lim+')');}
+      else{durum=' ✅ Uyumlu';}
+    }
+    izlemeOzet.push((r[0]||'')+'  '+r[1]+': '+r[3]+(r[2]?' (limit: '+r[2]+')':'')+durum);
+  });
+  var izlemeStr=izlemeOzet.join('\n') || 'İç izleme analiz verisi girilmemiş';
+
+  // Genel atıklar
+  var genAtikOzet=d.cevre.genAtiklar.map(function(r){
+    if(!r[0]&&!r[1]) return null;
+    return (r[0]||'?')+' – '+(r[1]||'?')+': '+(r[3]||'?')+' kg ('+(r[4]||'?')+'), Firma: '+(r[5]||'?')+', Gönderim: '+(r[6]||'?');
+  }).filter(Boolean).join('\n') || 'Genel atık verisi girilmemiş';
+
+  // Tehlikeli atıklar
+  var tehAtikOzet=d.cevre.tehAtiklar.map(function(r){
+    if(!r[0]&&!r[1]) return null;
+    return (r[0]||'?')+' – '+(r[1]||'?')+': '+(r[3]||'?')+' kg ('+(r[4]||'?')+'), Firma: '+(r[5]||'?')+', Gönderim: '+(r[6]||'?');
+  }).filter(Boolean).join('\n') || 'Tehlikeli atık verisi girilmemiş';
+
+  // Yakma sistemleri
+  var yakmaOzet=d.cevre.yakmaSistemleri.map(function(r){
+    if(!r[0]) return null;
+    return (r[0]||'?')+' – '+(r[1]||'?')+', '+(r[3]||'?')+' kW, Yakıt: '+(r[4]||'?')+', '+(r[5]||'?')+' m³/s';
+  }).filter(Boolean).join('\n') || 'Yakma sistemi verisi girilmemiş';
+
+  // İzinler
+  var gfbOzet=d.izinler.gfb.map(function(r){return r.filter(Boolean).join(' / ');}).filter(Boolean).join('\n') || 'GFB bilgisi girilmemiş';
+  var cevreIzinOzet=d.izinler.cevreIzin.map(function(r){return r.filter(Boolean).join(' / ');}).filter(Boolean).join('\n') || 'Çevre izni bilgisi girilmemiş';
+
+  // Kazalar
+  var kazaOzet=d.kazaBakim.kazalar.length?d.kazaBakim.kazalar.map(function(r){return r.filter(Boolean).join(' | ');}).join('\n'):'Dönemde kaza/kaçak kaydı yok';
+  var bakimOzet=d.kazaBakim.bakimlar.length?d.kazaBakim.bakimlar.map(function(r){return r.filter(Boolean).join(' | ');}).join('\n'):'Dönemde bakım/onarım kaydı yok';
+
+  // Eğitimler
+  var egitimOzet=d.egitimler.egitimler.map(function(r){return (r[0]||'?')+' – '+(r[1]||'?')+' – '+r[2]+' katılımcı';}).filter(function(r){return r.trim()&&r!='? – ? –  katılımcı';}).join('\n') || 'Eğitim kaydı girilmemiş';
+
+  // Beyanlar
+  var beyanOzet=d.cevre.beyanlar.map(function(r){return r.filter(Boolean).join(' / ');}).filter(Boolean).join('\n') || 'Atık beyanı bilgisi girilmemiş';
+
+  var prompt = 'Sen uzman bir Çevre Mühendisisin. Aşağıdaki aylık tesis denetim verilerini okuyarak resmi "F – SONUÇ VE ÖNERİLER" bölümünü hazırla.\n\n';
+  prompt += '=== TESİS BİLGİLERİ ===\n';
+  prompt += 'Tesis Adı: '+d.isletme.unvan+'\n';
+  prompt += 'Faaliyet: '+d.isletme.faaliyetKonusu+'\n';
+  prompt += 'Ziyaret Tarihi: '+d.kapak.ziyaretTarihi+' | Rapor Dönemi: '+d.kapak.raporAy+'\n';
+  prompt += 'Personel: '+d.isletme.personelSayisi+'\n';
+  prompt += 'Çevre Danışmanlık: '+d.isletme.danismanFirma+'\n';
+  prompt += 'Sorumlu Mühendis: '+d.isletme.muhendis+'\n\n';
+  prompt += '=== SU VE ATIKSU ===\n';
+  prompt += 'Su Tüketimi: '+suOzet+'\n';
+  prompt += 'Evsel Atıksu Açıklama: '+d.cevre.evselAtAciklama+'\n';
+  prompt += 'Arıtma Tesisi: '+d.cevre.artimaTesisi+'\n';
+  prompt += 'Deniz Suyu: '+d.cevre.denizSuyu+'\n\n';
+  prompt += '=== İÇ İZLEME ANALİZ SONUÇLARI ===\n'+izlemeStr+'\n';
+  if(izlemeUyarilar.length) prompt += '!!! UYARI - Limit durumu: '+izlemeUyarilar.join('; ')+'\n';
+  prompt += '\n=== HAVA VE YAKMA SİSTEMLERİ ===\n'+yakmaOzet+'\n';
+  prompt += 'Teyit Ölçümü: '+d.cevre.teyitOlcum+'\n';
+  prompt += 'SEÖS: '+d.cevre.seosAciklama+'\n';
+  prompt += 'Kontrolsüz Emisyon: '+d.cevre.kontrolsuzEmisyon+'\n\n';
+  prompt += '=== ATIK YÖNETİMİ ===\nGenel Atıklar:\n'+genAtikOzet+'\n\nTehlikeli Atıklar:\n'+tehAtikOzet+'\n';
+  prompt += 'Atık Yönetim Planı: '+d.cevre.atikYonetimPlan+'\n';
+  prompt += 'Sıfır Atık Belgesi: '+d.cevre.sifirAtikBelge+'\n';
+  prompt += 'Atık Beyanları:\n'+beyanOzet+'\n\n';
+  prompt += '=== GÜRÜLTÜ ===\n'+d.cevre.gurultuIzin+'\nAkustik: '+d.cevre.akustikRapor+'\n\n';
+  prompt += '=== DİĞER ===\nToprak: '+d.cevre.toprak+'\nKimyasal: '+d.cevre.kimyasal+'\nSigorta: '+d.cevre.sigortaBilgi+'\n\n';
+  prompt += '=== GFB / ÇEVRE İZNİ ===\nGFB:\n'+gfbOzet+'\nÇevre İzni:\n'+cevreIzinOzet+'\nAçıklama: '+d.izinler.izinAciklama+'\n\n';
+  prompt += '=== KAZA / BAKIM ===\nKazalar:\n'+kazaOzet+'\nBakım/Onarım:\n'+bakimOzet+'\n\n';
+  prompt += '=== ŞİKAYETLER ===\nİşletmeye: '+(d.sikayetler.isletme||'Yok')+'\nBakanlığa: '+(d.sikayetler.bakanlik||'Yok')+'\n\n';
+  prompt += '=== EĞİTİMLER ===\n'+egitimOzet+'\n'+d.egitimler.bilinclendir+'\n\n';
+  if(d.sonuc.metin && d.sonuc.metin.trim()){
+    prompt += '=== SAHA GÖZLEMLERİ (Mühendisin notları) ===\n'+d.sonuc.metin+'\n\n';
+  }
+
+  prompt += '=== GÖREV ===\n';
+  prompt += 'Yukarıdaki TÜM verilerden yola çıkarak Türkçe, resmi üslupla, 8-14 maddelik Sonuç ve Öneriler metni oluştur.\n';
+  prompt += 'Kurallar:\n';
+  prompt += '- Her madde somut, aksiyona yönelik ve tesise özgü olsun. Genel ifadelerden kaçın.\n';
+  prompt += '- İç izleme analizlerinde limit aşımı/limite yaklaşma varsa EN BAŞTA belirt.\n';
+  prompt += '- Hangi belgelerin yenilenmesi/güncellenmesi gerektiğini açıkça yaz.\n';
+  prompt += '- Atık gönderim belgesi, sözleşme, beyan eksikliklerini tespit et.\n';
+  prompt += '- Her maddenin başına uygun emoji ekle:\n';
+  prompt += '  ✅ = uyumlu durum  ⚠️ = dikkat/önlem  🔴 = acil/kritik  📋 = yapılacak iş\n';
+  prompt += '  🔄 = yenilenmeli  💧 = su/atıksu  🗑️ = atık  🏭 = emisyon/hava\n';
+  prompt += '  📊 = izleme/analiz  🌿 = genel çevre  🔒 = belge/lisans/sigorta  🎓 = eğitim\n';
+  prompt += '- SADECE maddeler üret. Giriş cümlesi, başlık, açıklama metni ekleme.\n';
+  prompt += '- Her madde ayrı satırda başlasın. Madde sonuna || koy.\n';
+
+  try{
+    var resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:2000,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    var data=await resp.json();
+    var rawText=(data.content||[]).map(function(c){return c.text||'';}).join('');
+    // Maddeleri ayır: || ile ya da satır başı ile
+    var maddeler=rawText.split('||').map(function(m){
+      return m.replace(/^\s*[\d]+[\.\)]\s*/,'').replace(/^\s*[-–]\s*/,'').trim();
+    }).filter(function(m){return m.length>10;});
+    if(!maddeler.length){
+      // || yoksa satır satır dene
+      maddeler=rawText.split('\n').map(function(m){return m.trim();}).filter(function(m){return m.length>10;});
+    }
+    if(!maddeler.length) throw new Error('Yanıt boş geldi');
+
+    res.className='aires';
+    res.innerHTML=maddeler.map(function(m,i){
+      return '<div class="aimadde"><div class="aibullet">'+(i+1)+'</div><div class="aimtxt">'+m+'</div></div>';
+    }).join('');
+    cp.style.display='block';
+    cp.dataset.text=maddeler.join('\n');
+    // Otomatik sonuç metnine aktar
+    var mevcutMetin=document.getElementById('sonucMetin').value.trim();
+    if(!mevcutMetin){
+      document.getElementById('sonucMetin').value=maddeler.join('\n');
+      cp.textContent='✅ Sonuç metnine aktarıldı';
+    }
+  }catch(err){
+    res.className='aires';
+    res.innerHTML='<span style="color:var(--danger);font-size:11px">⚠️ AI yorumu oluşturulamadı: '+err.message+'</span>';
+  }
+  btn.disabled=false;
+}
+function copyAI(){
+  var text=document.getElementById('aiCopy').dataset.text;
+  document.getElementById('sonucMetin').value=text;
+  document.getElementById('aiCopy').textContent='✅ Aktarıldı!';
+  setTimeout(function(){document.getElementById('aiCopy').textContent='📋 Öneriyi Sonuç Metnine Aktar';},2500);
+}
+function renderPreview(){
+  var d=collectAll();
+  var c=document.getElementById('prvContent');
+  function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function pv(val){
+    if(!val||!val.toString().trim()) return '<span class="pval empty">—</span>';
+    return '<span class="pval">'+esc(val.toString()).replace(/\n/g,'<br>')+'</span>';
+  }
+  function row(lbl,val){return '<div class="prow"><span class="plbl">'+esc(lbl)+'</span>'+pv(val)+'</div>';}
+  function tbl(rows,hdrs){
+    var filtered=(rows||[]).filter(function(r){return r.some(function(x){return x&&x.toString().trim();});});
+    if(!filtered.length) return '<p style="color:var(--tx3);font-size:10px;font-style:italic;padding:4px 0">Kayıt girilmemiş</p>';
+    var h=hdrs.map(function(x){return '<th>'+esc(x)+'</th>';}).join('');
+    var b=filtered.map(function(r){return '<tr>'+r.map(function(x){return '<td>'+esc(x||'—')+'</td>';}).join('')+'</tr>';}).join('');
+    return '<div class="ptblwrap"><table class="ptbl"><thead><tr>'+h+'</tr></thead><tbody>'+b+'</tbody></table></div>';
+  }
+  function sh(t){return '<div class="psubhdr">'+t+'</div>';}
+  function sec(code,title,body,open){
+    open=(open===undefined)?true:open;
+    var colCls=open?'':'pcol';
+    var tog=open?'&#9650;':'&#9660;';
+    return '<div class="prvsec"><div class="prvshdr" onclick="tpSec(this)"><span class="pcode">'+code+'</span><span class="ptitle">'+esc(title)+'</span><span class="ptog">'+tog+'</span></div><div class="prvbody '+colCls+'">'+body+'</div></div>';
+  }
+
+  var html='<div class="prvwrap">';
+
+  // KAPAK
+  var saat=(d.kapak.sabah?'Öğlenden Önce ':' ')+(d.kapak.ogleden?'Öğlenden Sonra':'');
+  html+=sec('KAPAK','Rapor Kapağı',
+    row('Tesis Adı',d.isletme.unvan)+
+    row('Ziyaret Tarihi',d.kapak.ziyaretTarihi)+
+    row('Rapor Ayı',d.kapak.raporAy)+
+    row('Ziyaret Saati',saat.trim())
+  );
+
+  // A
+  html+=sec('A','İşletme Bilgileri',
+    row('Unvan',d.isletme.unvan)+row('Adres',d.isletme.adres)+
+    row('Faaliyet Konusu',d.isletme.faaliyetKonusu)+
+    row('Personel Sayısı',d.isletme.personelSayisi)+
+    row('İşletme Yetkilisi',d.isletme.yetkili)+
+    row('Danışmanlık Firması',d.isletme.danismanFirma)+
+    row('Sorumlu Mühendis',d.isletme.muhendis)+
+    row('Fatura Bilgisi',d.isletme.faturaBilgisi)+
+    row('Hizmet Yılı',d.isletme.hizmetYili)+
+    sh('ÇED KARARLARI')+tbl(d.isletme.cedKararlari,['Tarih/Sayı','Konu','Merci'])+
+    row('ÇED Açıklama',d.isletme.cedAciklama)+
+    row('İzin Yönetmeliği Kapsamı',d.isletme.izinKapsam)
+  );
+
+  // B.1
+  html+=sec('B.1','Su ve Atıksu Yönetimi',
+    sh('B.1.1 SU TÜKETİMİ')+tbl(d.cevre.suTuketimi,['Kaynak','Bağlı Birim','Miktar (m³/ay)','Dönem'])+
+    row('Su Tüketimi Açıklaması',d.cevre.suAciklama)+
+    sh('B.1.2 EVSEL ATIKSU')+tbl(d.cevre.evselAtiksu,['Atıksu Kaynağı','Miktar (m³/ay)','Bertaraf Yöntemi'])+
+    row('Evsel Atıksu Açıklaması',d.cevre.evselAtAciklama)+
+    row('B.1.3 Endüstriyel Atıksu',d.cevre.endAtiksu)+
+    sh('B.1.4 DİĞER ATIKSU')+tbl(d.cevre.digerAtiksu,['Atıksu Kaynağı','Miktar (m³/ay)','Bertaraf Yöntemi'])+
+    row('B.1.5 Arıtma Tesisi',d.cevre.artimaTesisi)+
+    sh('B.1.6 İÇ İZLEME ANALİZ SONUÇLARI')+tbl(d.cevre.izleme,['Tarih','Parametre','Yön. Limiti','Analiz Sonucu'])+
+    sh('B.1.7 YERALTI SUYU KUYULARI')+tbl(d.cevre.kuyular,['Nokta','Y','X','Derinlik (m)'])+
+    row('B.1.8 Deniz Suyu Kalitesi',d.cevre.denizSuyu)
+  );
+
+  // B.2
+  html+=sec('B.2','Hava Yönetimi',
+    sh('YAKMA SİSTEMLERİ')+tbl(d.cevre.yakmaSistemleri,['Baca Kodu','Sistem','Amaç','Isıl Güç (kW)','Yakıt','Miktar (m³/s)'])+
+    sh('BACA YÜKSEKLİKLERİ')+tbl(d.cevre.bacaYukseklikleri,['Baca Kodu','Sistem','Yerden (m)','Çatıdan (m)'])+
+    row('B.2.1 Teyit Ölçümü',d.cevre.teyitOlcum)+
+    row('B.2.2 SEÖS',d.cevre.seosAciklama)+
+    row('B.2.3 İç İzleme (Hava)',d.cevre.icIzlemeHava)+
+    row('B.2.4 Kontrolsüz Emisyon',d.cevre.kontrolsuzEmisyon),false
+  );
+
+  // B.3
+  html+=sec('B.3','Atık Yönetimi',
+    sh('B.3.1 GENEL ATIKLAR')+tbl(d.cevre.genAtiklar,['Atık Kodu','Açıklama','Kaynak','Miktar (kg)','Bertaraf','Firma/Lisans','Gönderim/Taşıma No'])+
+    sh('B.3.2 TEHLİKELİ ATIKLAR')+tbl(d.cevre.tehAtiklar,['Atık Kodu','Açıklama','Kaynak','Miktar (kg)','Bertaraf','Firma/Lisans','Gönderim/Taşıma No'])+
+    row('B.3.3 Atık Analizleri',d.cevre.atikAnaliz),false
+  );
+
+  // B.4
+  html+=sec('B.4','Gürültü Yönetimi',
+    row('Gürültü İzni Durumu',d.cevre.gurultuIzin)+
+    sh('MÜZİK YAYIN BİLGİLERİ')+tbl(d.cevre.muzikYayin,['Yayın Türü','Bölge','Saat Aralığı'])+
+    row('Akustik Rapor ve İzin',d.cevre.akustikRapor),false
+  );
+
+  // B.5-10
+  html+=sec('B.5–B.10','Toprak, Kimyasal, Kıyı, Maden, Diğer',
+    row('B.5 Toprak Kirliliği',d.cevre.toprak)+
+    row('B.6 Kimyasallar',d.cevre.kimyasal)+
+    row('B.7 Büyük End. Kazalar',d.cevre.endKaza)+
+    row('B.8.1 Deniz Kirliliği',d.cevre.denizKirlilik)+
+    row('B.8.2 Atık Kabul Tesisi',d.cevre.atikKabul)+
+    row('B.9.1 Koordinatlar (Maden)',d.cevre.madenKoord)+
+    row('B.9.2 Patlatma',d.cevre.patlatma)+
+    row('B.10.1 Tehlikeli Atık Sigortası',d.cevre.sigortaBilgi)+
+    row('B.10.2 Atık Yönetim Planı',d.cevre.atikYonetimPlan)+
+    sh('B.10.3 ATIK BEYANLARI')+tbl(d.cevre.beyanlar,['Beyan Adı','Dönem','Açıklama'])+
+    row('B.10.4 Sıfır Atık Belgesi',d.cevre.sifirAtikBelge),false
+  );
+
+  // C
+  html+=sec('C','GFB / Çevre İzni / Lisans',
+    sh('C.1 GFB İŞLEMLERİ')+tbl(d.izinler.gfb,['GFB Konusu','Belge Tarih/Sayı','Alındığı Mercii'])+
+    sh('C.2 ÇEVRE İZNİ/LİSANSI')+tbl(d.izinler.cevreIzin,['İzin/Lisans Konusu','Belge Tarih/Sayı','Alındığı Mercii'])+
+    row('Açıklamalar',d.izinler.izinAciklama)
+  );
+
+  // Ç
+  html+=sec('Ç','Kaza, Kaçak, Arıza, Bakım',
+    sh('Ç.1 KAZA VE KAÇAKLAR')+tbl(d.kazaBakim.kazalar,['Oluşan Bölge','Tarih','Alınan Önlem','Sonuç'])+
+    sh('Ç.2 ARIZA / BAKIM / ONARIM')+tbl(d.kazaBakim.bakimlar,['Yapılan Bölge','Arıza/Bakım Açıklaması','Sonuç'])
+  );
+
+  // D
+  html+=sec('D','Şikayetler',
+    row('D.1 İşletmeye Gelen Şikayetler',d.sikayetler.isletme||'–')+
+    row('D.2 Bakanlığa İletilen Şikayetler',d.sikayetler.bakanlik||'–')
+  );
+
+  // E
+  html+=sec('E','Eğitimler',
+    sh('E.1 EĞİTİMLER')+tbl(d.egitimler.egitimler,['Eğitim Konusu','Tarih','Katılımcı Sayısı'])+
+    row('E.2 Bilinçlendirme Çalışmaları',d.egitimler.bilinclendir)
+  );
+
+  // F - Sonuç: madde madde render et
+  var sonucIcerik='';
+  if(d.sonuc.metin&&d.sonuc.metin.trim()){
+    var satirlar=d.sonuc.metin.split('\n').map(function(s){return s.trim();}).filter(function(s){return s.length>0;});
+    var liHtml=satirlar.map(function(s,i){
+      return '<div class="aimadde"><div class="aibullet">'+(i+1)+'</div><div class="aimtxt">'+esc(s)+'</div></div>';
+    }).join('');
+    sonucIcerik='<div style="margin-top:4px">'+liHtml+'</div>';
+  } else {
+    sonucIcerik='<span class="pval empty">Sonuç metni girilmemiş</span>';
+  }
+
+  var fotolar='';
+  if(d.sonuc.fotograflar&&d.sonuc.fotograflar.length){
+    fotolar=sh('FOTOĞRAFLAR')+
+      '<div class="phprevgrid">'+
+      d.sonuc.fotograflar.map(function(f){
+        return '<div class="phprevitem"><img src="'+f.src+'" loading="lazy"><div class="phcaptxt">'+esc(f.caption||'')+'</div></div>';
+      }).join('')+
+      '</div>';
+  }
+
+  html+=sec('F','Sonuç ve Öneriler',
+    '<div class="prow"><span class="plbl">Değerlendirme</span><div style="flex:1">'+sonucIcerik+'</div></div>'+
+    fotolar+
+    row('Ekler',d.sonuc.ekler)
+  );
+
+  // İmza
+  html+=sec('İMZA','İmza Bilgileri',
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">'+
+    '<div>'+row('İşletme Sorumlusu',d.sonuc.isletmeSorumlu)+row('İmza Tarihi',d.sonuc.imzaTarih1)+'</div>'+
+    '<div>'+row('Çevre Mühendisi',d.sonuc.muhendisImza)+row('İmza Tarihi',d.sonuc.imzaTarih2)+'</div>'+
+    '</div>'
+  );
+
+  html+='</div>';
+  c.innerHTML=html;
+}
+function tpSec(hdr){
+  var b=hdr.nextElementSibling;
+  var tog=hdr.querySelector('.ptog');
+  b.classList.toggle('pcol');
+  tog.innerHTML=b.classList.contains('pcol')?'&#9660;':'&#9650;';
+}
+// exportJSON ve importJSON yeni versiyonla değiştirildi
+function exportPrint(){
+  renderPreview();
+  document.getElementById('expModal').classList.remove('open');
+  setTimeout(function(){window.print();},300);
+}
+function loadData(d){
+  if(d.kapak){sv('ziyaretTarihi',d.kapak.ziyaretTarihi);sv('raporAy',d.kapak.raporAy);document.getElementById('sabah').checked=!!d.kapak.sabah;document.getElementById('ogleden').checked=!!d.kapak.ogleden;}
+  if(d.isletme){['unvan','adres','faaliyetKonusu','personelSayisi','yetkili','danismanFirma','muhendis','faturaBilgisi','hizmetYili','cedAciklama','izinKapsam'].forEach(function(k){sv(k,d.isletme[k]);});lTbl('cedBody',d.isletme.cedKararlari,['text','text','text']);}
+  if(d.cevre){
+    lTbl('suBody',d.cevre.suTuketimi,['text','text','number','text']);sv('suAciklama',d.cevre.suAciklama);
+    lTbl('evselAtBody',d.cevre.evselAtiksu,['text','number','text']);sv('evselAtAciklama',d.cevre.evselAtAciklama);
+    lTbl('digerAtBody',d.cevre.digerAtiksu,['text','number','text']);lTbl('izlemeBody',d.cevre.izleme,['date','text','text','text']);
+    lTbl('kuyuBody',d.cevre.kuyular,['text','number','number','number']);lTbl('yakmBody',d.cevre.yakmaSistemleri,['text','text','text','number','text','number']);
+    lTbl('bacaBody',d.cevre.bacaYukseklikleri,['text','text','number','number']);lTbl('genAtikBody',d.cevre.genAtiklar,['text','text','text','number','text','text','text']);
+    lTbl('tehAtikBody',d.cevre.tehAtiklar,['text','text','text','number','text','text','text']);lTbl('muzikBody',d.cevre.muzikYayin,['text','text','text']);
+    lTbl('beyanBody',d.cevre.beyanlar,['text','text','text']);
+    ['endAtiksu','artimaTesisi','denizSuyu','teyitOlcum','seosAciklama','icIzlemeHava','kontrolsuzEmisyon','atikAnaliz','gurultuIzin','akustikRapor','toprak','kimyasal','endKaza','denizKirlilik','atikKabul','madenKoord','patlatma','sigortaBilgi','atikYonetimPlan','sifirAtikBelge'].forEach(function(k){sv(k,d.cevre[k]);});
+  }
+  if(d.izinler){lTbl('gfbBody',d.izinler.gfb,['text','text','text']);lTbl('cevreIzinBody',d.izinler.cevreIzin,['text','text','text']);sv('izinAciklama',d.izinler.izinAciklama);}
+  if(d.kazaBakim){lTbl('kazaBody',d.kazaBakim.kazalar,['text','date','text','text']);lTbl('bakimBody',d.kazaBakim.bakimlar,['text','text','text']);}
+  if(d.sikayetler){sv('isletmeSimayet',d.sikayetler.isletme);sv('bakanlikSikayet',d.sikayetler.bakanlik);}
+  if(d.egitimler){lTbl('egitimBody',d.egitimler.egitimler,['text','date','number']);sv('bilinclendir',d.egitimler.bilinclendir);}
+  if(d.sonuc){['sonucMetin','ekler','isletmeSorumlu','muhendisImza','imzaTarih1','imzaTarih2'].forEach(function(k){sv(k,d.sonuc[k]);});if(d.sonuc.fotograflar){d.sonuc.fotograflar.forEach(function(f){photos.push({id:Date.now()+Math.random(),src:f.src,caption:f.caption});});rendPh();}}
+}
+function lTbl(tbId,rows,colTypes){
+  if(!rows||!rows.length)return;
+  var tb=document.getElementById(tbId);tb.innerHTML='';
+  rows.forEach(function(rd){addRow(tbId,colTypes);var ins=tb.lastElementChild.querySelectorAll('input,select');rd.forEach(function(val,i){if(ins[i])ins[i].value=val;});});
+}
+function openModal(){document.getElementById('expModal').classList.add('open');}
+
+// =================== DIRTY TRACKING ===================
+// Her bölüm için değişiklik takibi
+// sectionKeys: hangi collectAll anahtarları hangi bölüme ait
+var SECTION_MAP = [
+  {name:'kapak',   keys:['kapak']},
+  {name:'isletme', keys:['isletme']},
+  {name:'cevre',   keys:['cevre']},
+  {name:'izinler', keys:['izinler']},
+  {name:'kazaBakim',keys:['kazaBakim']},
+  {name:'sikayetler',keys:['sikayetler']},
+  {name:'egitimler', keys:['egitimler']},
+  {name:'sonuc',   keys:['sonuc']}
+];
+var dirtyMap = {}; // {sectionName: true/false}
+var prevReport = null; // yüklenen önceki rapor
+
+function markDirty(secIdx){
+  var sname = SECTION_MAP[secIdx].name;
+  if(!dirtyMap[sname]){
+    dirtyMap[sname] = true;
+    // Badge ekle nav pill'e
+    var pill = document.querySelectorAll('.spill')[secIdx];
+    if(pill && !pill.querySelector('.dirty-badge')){
+      var b = document.createElement('span');
+      b.className='dirty-badge';
+      b.textContent='✏️';
+      b.style.cssText='font-size:9px;margin-left:2px';
+      pill.appendChild(b);
+    }
+    // Banner göster
+    updateDirtyBanner();
+  }
+}
+
+function updateDirtyBanner(){
+  var banner = document.getElementById('dirtyBanner');
+  if(!banner) return;
+  var dirtyNames = Object.keys(dirtyMap).filter(function(k){return dirtyMap[k];});
+  if(!prevReport || !dirtyNames.length){
+    banner.style.display='none'; return;
+  }
+  var sectionLabels = {
+    kapak:'Kapak', isletme:'A.İşletme', cevre:'B.Çevresel',
+    izinler:'C.İzinler', kazaBakim:'Ç.Kaza/Bakım',
+    sikayetler:'D.Şikayet', egitimler:'E.Eğitim', sonuc:'F.Sonuç'
+  };
+  var changed = dirtyNames.map(function(k){return '<b style="color:var(--ac)">'+sectionLabels[k]+'</b>';}).join(', ');
+  var total = SECTION_MAP.length;
+  var unchanged = total - dirtyNames.length;
+  banner.innerHTML = '✏️ Değişen: '+changed+' &nbsp;|&nbsp; 🔒 Sabit kalan: <b style="color:var(--ac2)">'+unchanged+' bölüm</b>';
+  banner.style.display='flex';
+}
+
+// Her bölümün input/textarea/select değişimini dinle
+function attachDirtyListeners(){
+  SECTION_MAP.forEach(function(sec, idx){
+    var el = document.getElementById('sec'+idx);
+    if(!el) return;
+    ['input','change'].forEach(function(evt){
+      el.addEventListener(evt, function(){markDirty(idx);}, {passive:true});
+    });
+  });
+}
+
+// =================== ÖNCEKİ RAPOR YÜKLEME ===================
+function loadPreviousReport(evt){
+  var f = evt.target.files[0]; if(!f) return;
+  var r = new FileReader();
+  r.onload = function(e){
+    try{
+      var data = JSON.parse(e.target.result);
+      prevReport = data;
+      // Sıfırla dirty map
+      dirtyMap = {};
+      document.querySelectorAll('.dirty-badge').forEach(function(b){b.remove();});
+      updateDirtyBanner();
+      // Tüm veriyi yükle
+      loadData(data);
+      // Bilgi göster
+      var info = document.getElementById('importedInfo');
+      var tesisAdi = (data.isletme&&data.isletme.unvan)||'Bilinmeyen Tesis';
+      var tarih = (data.kapak&&data.kapak.ziyaretTarihi)||'';
+      var ay = (data.kapak&&data.kapak.raporAy)||'';
+      info.innerHTML = '✅ Yüklendi: <b>'+tesisAdi+'</b>'+(tarih?' — '+tarih:'')+' '+(ay?'('+ay+')':'');
+      info.style.display='block';
+      document.getElementById('importModal').classList.remove('open');
+      // Banner'i güncelle
+      updateDirtyBanner();
+      // Dirty listener'ları yeniden bağla (tablolar yeniden oluşturuldu)
+      setTimeout(attachDirtyListeners, 200);
+      alert('✅ Önceki rapor yüklendi!\n\nHangi bölümlere dokunursanız o bölümler otomatik "değişti" olarak işaretlenir.\nDeğiştirmediğiniz bölümler önceki rapordan alınır.');
+    }catch(err){alert('Dosya okunamadı: '+err.message);}
+  };
+  r.readAsText(f);
+}
+
+// =================== AKILLI KAYIT ===================
+function exportJSON(){
+  var current = collectAll();
+  var merged;
+  if(prevReport && Object.keys(dirtyMap).length > 0){
+    // Merge: dirty olan bölümler current'tan, diğerleri prevReport'tan
+    merged = JSON.parse(JSON.stringify(prevReport)); // derin kopya
+    SECTION_MAP.forEach(function(sec){
+      if(dirtyMap[sec.name]){
+        sec.keys.forEach(function(k){
+          merged[k] = current[k];
+        });
+      }
+    });
+    // meta güncelle
+    merged.meta = current.meta || {};
+    merged.meta.mergedAt = new Date().toISOString();
+    merged.meta.changedSections = Object.keys(dirtyMap).filter(function(k){return dirtyMap[k];});
+    merged.meta.basedOn = (prevReport.meta&&prevReport.meta.exportedAt)||'';
+  } else {
+    merged = current;
+  }
+  var blob = new Blob([JSON.stringify(merged,null,2)],{type:'application/json'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  var tesis = (v('unvan')||'rapor').substring(0,18).replace(/\s+/g,'_');
+  var tarih = v('ziyaretTarihi')||new Date().toISOString().slice(0,10);
+  a.href=url; a.download='cevre_rapor_'+tesis+'_'+tarih+'.json';
+  a.click(); URL.revokeObjectURL(url);
+  document.getElementById('expModal').classList.remove('open');
+}
+
+function autoSave(){try{localStorage.setItem('cevreRapor_v5',JSON.stringify(collectAll()));}catch(e){}}
+setInterval(autoSave,25000);
+window.addEventListener('load',function(){
+  // ---- Buton event listener'ları ----
+  function bid(id){ return document.getElementById(id); }
+
+  // Header butonları
+  bid('btnImport').addEventListener('click', function(){ bid('importModal').classList.add('open'); });
+  bid('btnPreview').addEventListener('click', function(){ switchTab('preview'); });
+  bid('btnExport').addEventListener('click', function(){ bid('expModal').classList.add('open'); });
+
+  // Tab bar
+  bid('tabbtn-form').addEventListener('click', function(){ switchTab('form'); });
+  bid('tabbtn-preview').addEventListener('click', function(){ switchTab('preview'); });
+
+  // Preview refresh
+  bid('btnRefreshPreview').addEventListener('click', function(){ renderPreview(); });
+
+  // İmport modal kapat
+  bid('btnImportClose').addEventListener('click', function(){ bid('importModal').classList.remove('open'); });
+
+  // Export modal butonları
+  bid('btnExpClose').addEventListener('click', function(){ bid('expModal').classList.remove('open'); });
+  bid('btnExpJSON').addEventListener('click', function(){ exportJSON(); });
+  bid('btnExpPrint').addEventListener('click', function(){ exportPrint(); });
+  if(bid('btnGotoPreview')) bid('btnGotoPreview').addEventListener('click', function(){ switchTab('preview'); });
+
+  // Modal overlay'e tıklayınca kapat
+  bid('importModal').addEventListener('click', function(e){ if(e.target===this) this.classList.remove('open'); });
+  bid('expModal').addEventListener('click', function(e){ if(e.target===this) this.classList.remove('open'); });
+
+  // ---- Sayfa başlangıç verileri ----
+  try{var raw=localStorage.getItem('cevreRapor_v5');if(raw){var p=JSON.parse(raw);if(p.isletme&&(p.isletme.unvan||p.kapak.ziyaretTarihi)){if(confirm('Kaydedilmiş taslak bulundu. Devam etmek ister misiniz?')){loadData(p);}}}}catch(e){}
+  var today=new Date().toISOString().slice(0,10);
+  if(!v('ziyaretTarihi'))sv('ziyaretTarihi',today);
+  if(!v('imzaTarih1'))sv('imzaTarih1',today);
+  if(!v('imzaTarih2'))sv('imzaTarih2',today);
+  attachDirtyListeners();
+});
+</script>
+</body>
+</html>
